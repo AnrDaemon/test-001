@@ -37,3 +37,36 @@ $smarty->registerFilter('pre',
     return $tpl ?: $tpl_source;
   }
 );
+
+
+
+
+class My_Smarty_Plugin_Class {
+
+	public static function test_modifier($var)
+	{
+		return 'work modifier';
+	}
+		
+	public static function translate($params, $content, $smarty, &$repeat)
+	{
+
+		if($repeat)
+			return false;
+
+		return 'work block';
+	}
+}
+
+
+function smarty_plugin_handler($name, $type, $template, &$callback, &$script, &$cacheabl)
+{
+	if(in_array($type, ['block', 'modifier']))
+	{
+		$callback = array('My_Smarty_Plugin_Class', $name);
+		return true;
+	}
+	return false;
+}
+
+$smarty->registerDefaultPluginHandler('smarty_plugin_handler');
